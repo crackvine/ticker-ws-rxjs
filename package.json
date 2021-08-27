@@ -1,0 +1,32 @@
+{
+  "name": "ticker-ws-rxjs",
+  "version": "1.0.0",
+  "description": "Ticker using websockets and rxjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel serve ./index.html --no-cache",
+    "build": "parcel build ./index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crackvine/ticker-ws-rxjs.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/crackvine/ticker-ws-rxjs/issues"
+  },
+  "homepage": "https://github.com/crackvine/ticker-ws-rxjs#readme",
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.24.2",
+    "parcel": "^2.0.0-rc.0"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "rxjs": "^7.3.0"
+  }
+}
