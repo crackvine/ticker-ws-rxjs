@@ -1,32 +1,20 @@
-import { interval } from 'rxjs';
-import { map, filter, takeWhile } from 'rxjs/operators';
+import { webSocket } from 'rxjs/webSocket';
+import { map, scan, filter } from 'rxjs/operators';
 
-console.log(process.env.BINANCE_API_KEY);
+const OVER = 60;
+const subject = webSocket('wss://stream.binance.com:9443/ws/btcusdt@ticker');
 
-// An OBSERVER which logs
-const loggerObserver = {
-  next: (x) => {
-    console.log(x);
-  },
-  complete: () => {
-    console.log('done');
-  },
-  error: (error) => {
-    console.error(error);
-  },
-};
-
-// An interval OBSERVABLE
-const ticker$ = interval(2000).pipe(
-  takeWhile((x) => x < 5),
-  map((x) => x * 2 + x),
-  filter((x) => x % 2 === 0),
+const mapped = subject.pipe(
+  scan((acc, curr) => {
+    acc.push(curr.a);
+    if (acc.length > OVER) { acc.shift(); }
+    return acc;
+  }, []),
+  map(arr => arr.reduce((avg, val) => avg + parseFloat(val), 0) / arr.length),
 );
 
-// A SUBSCRIPTION of the logger observer to the interval observable
-const loggerSub1 = ticker$.subscribe(loggerObserver);
-
-// UNSUBSCRIBING the subscription after a period of time
-setTimeout(() => {
-  loggerSub1.unsubscribe();
-}, 20000);
+mapped.subscribe({
+  next: msg => console.log(msg), 
+  error: err => console.log(err), 
+  complete: () => console.log('complete')
+});
